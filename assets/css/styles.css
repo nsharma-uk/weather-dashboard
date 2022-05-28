@@ -1,0 +1,13 @@
+/* CSS HEX */
+:root {
+--rich-black-fogra-39: #02010aff;
+--oxford-blue: #04052eff;
+--midnight-blue: #140152ff;
+--navy-blue: #22007cff;
+--duke-blue: #0d00a4ff;
+}
+
+body{
+    font-family: 'Lusitana', serif;
+font-family: 'Raleway', sans-serif;
+}
