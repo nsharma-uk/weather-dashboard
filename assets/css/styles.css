@@ -8,6 +8,18 @@
 }
 
 body{
-    font-family: 'Lusitana', serif;
-font-family: 'Raleway', sans-serif;
+   
+}
+
+.header-banner {
+    font-family: 'Raleway', sans-serif;
+    height: 130px;
+    width: 100%;
+    background-image: url(../images/weather-banner.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  main {
+  font-family: 'Lusitana', serif;
 }
