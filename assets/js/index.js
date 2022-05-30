@@ -1,10 +1,24 @@
-//API key 
+//API key
 
-const API_KEY= "e5cd5aafaf451f96b10b7a70a90ea75b";
+const API_KEY = "ef38ee1c920fe9c4acd96f8dd551173a";
 
+//UTILITIES FUNCTIONS
 
+//extract info from local storage (get)
+const getFromLocalStorage = (key, defaultValue) => {
+  const parsedData = JSON.parse(localStorage.getItem(key));
+  return parsedData ? parsedData : defaultValue;
+};
 
+//write info into local storage (set)
+const writeToLocalStorage = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
 
+//empty local storage (clear)
+const clearLS = () => {
+  localStorage.clear();
+};
 
 const renderCities = () => {
   // get recent cities from LS []
@@ -42,7 +56,20 @@ const handleFormSubmit = () => {
 };
 
 const onReady = () => {
-  // render recent cities
+  //render search history by targeting parent div
+  const recentSearchesContainer = $("recent-searches-container");
+
+  //get recent searches from LS
+  const recentSearches = readFromLocalStorage("recentSearches", []);
+
+  if (recentSearches.length) {
+    //if recent search has cities, render recent cities
+    // else, empty show alert
+  } else {
+    const alert = `<div class="alert alert-warning" role="alert">
+  You have no recent searches!
+</div>`;
+  }
 };
 
 $(document).ready(onReady);

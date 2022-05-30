@@ -46,7 +46,7 @@
         <div class="col-sm-12 col-md-3 border">
           <!-- search form -->
           <div>
-            <h2 class="mt-3 text-center">City search form</h2>
+            <h2 class="mt-3 fs-4 text-center">City search form</h2>
             <hr/>
             <form class="p-3" id="search-form">
               <div class="mb-3">
@@ -60,10 +60,11 @@
 
           <!-- recent searches -->
           <div id="recent-searches-container">
-            <h2 class="mt-3 text-center">Search History</h2>
-            <hr/>
-            <button class="btn btn-warning clear-btn" id="clear-btn" type="button">Clear searches</button>
-          </div>
+            <h2 class="mt-5 fs-4 text-center">Search History</h2>
+            <hr>
+            <ul class="search-list text-center fs-5 p-0" id="search-list">
+            </ul>
+            </div>
         </div>
 
         <!-- current and future data section -->
@@ -79,7 +80,7 @@
       <div class="card-body">
         <div class="card-condition d-flex flex-row justify-content-center">
          <div>
-          <img class="weather-icon d-flex flex-row align-items-center mb-0" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png />
+          <img class="weather-icon d-flex flex-row align-items-center mb-0" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png alt="weather icon"/>
           </div>
           </div>
         <p class="card-text text-center">
@@ -96,18 +97,15 @@
     </div>
 
 <!--forecast weather section-->
-    
-        <h2 class="forecast-title pl-3 pr-3">5-Day Forecast</h2> 
-        <div class="forecast-container d-flex justify-content-center" id="forecast-container"></div>
-                <div class="forecast-card d-flex flex-column align-items-center m-1">
+<h2 class="forecast-title pl-3 pr-3">5-Day Forecast</h2> 
+<div class="forecast-container d-flex justify-content-center" id="forecast-container">
       
-        <h4 class="card-header w-100 text-center">Date</h4>
-        <div class="card-body">
-          <img
-      src="http://openweathermap.org/img/w/${each.weather[0].icon}.png"
-      class="shadow-sm p-3 mt-3 bg-body rounded border card-img-top weather-icon"
-      alt="weather icon"
-    />
+      
+      
+      <div class="forecast-card d-flex flex-column align-items-center m-1">
+       <h4 class="card-header w-100 text-center">Date</h4>
+      <div class="card-body">
+       <img src="http://openweathermap.org/img/w/${each.weather[0].icon}.png" class="weather-icon" alt="weather icon"/>
        </div>
       <p class="card-text text-center">
         Temp : Temp <span>&#8451;</span>
@@ -121,6 +119,71 @@
       </p>
     </div>
 
+    <div class="forecast-card d-flex flex-column align-items-center m-1">
+      <h4 class="card-header w-100 text-center">Date</h4>
+     <div class="card-body">
+      <img src="http://openweathermap.org/img/w/${each.weather[0].icon}.png" class="weather-icon" alt="weather icon"/>
+      </div>
+     <p class="card-text text-center">
+       Temp : Temp <span>&#8451;</span>
+     </p>
+     <p class="card-text text-center">Humidity : 40%</p>
+     <p class="card-text text-center">Wind : 35 MPH</p>
+     <p class="card-text text-center">
+     UV Index :
+     <span class="uvIndex pl-3 pr-3"> High
+ </span>
+     </p>
+   </div>
+   <div class="forecast-card d-flex flex-column align-items-center m-1">
+    <h4 class="card-header w-100 text-center">Date</h4>
+   <div class="card-body">
+    <img src="http://openweathermap.org/img/w/${each.weather[0].icon}.png" class="weather-icon" alt="weather icon"/>
+    </div>
+   <p class="card-text text-center">
+     Temp : Temp <span>&#8451;</span>
+   </p>
+   <p class="card-text text-center">Humidity : 40%</p>
+   <p class="card-text text-center">Wind : 35 MPH</p>
+   <p class="card-text text-center">
+   UV Index :
+   <span class="uvIndex pl-3 pr-3"> High
+</span>
+   </p>
+ </div>
+ <div class="forecast-card d-flex flex-column align-items-center m-1">
+  <h4 class="card-header w-100 text-center">Date</h4>
+ <div class="card-body">
+  <img src="http://openweathermap.org/img/w/${each.weather[0].icon}.png" class="weather-icon" alt="weather icon"/>
+  </div>
+ <p class="card-text text-center">
+   Temp : Temp <span>&#8451;</span>
+ </p>
+ <p class="card-text text-center">Humidity : 40%</p>
+ <p class="card-text text-center">Wind : 35 MPH</p>
+ <p class="card-text text-center">
+ UV Index :
+ <span class="uvIndex pl-3 pr-3"> High
+</span>
+ </p>
+</div>
+<div class="forecast-card d-flex flex-column align-items-center m-1">
+  <h4 class="card-header w-100 text-center">Date</h4>
+ <div class="card-body">
+  <img src="http://openweathermap.org/img/w/${each.weather[0].icon}.png" class="weather-icon" alt="weather icon"/>
+  </div>
+ <p class="card-text text-center">
+   Temp : Temp <span>&#8451;</span>
+ </p>
+ <p class="card-text text-center">Humidity : 40%</p>
+ <p class="card-text text-center">Wind : 35 MPH</p>
+ <p class="card-text text-center">
+ UV Index :
+ <span class="uvIndex pl-3 pr-3"> High
+</span>
+ </p>
+</div>
+  </div>
           
     </main>
 

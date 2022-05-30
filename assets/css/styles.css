@@ -58,11 +58,13 @@ h2 {
 
 /*search form styling */
 
-.btn
-
-#submit-btn {
-    background-color:#8fe0ff;
+#search-form {
+    text-align: center;
 }
+
+.btn {
+    background-color:#8fe0ff;
+  }
 
 
 /*current weather styling */
