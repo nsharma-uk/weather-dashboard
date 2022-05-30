@@ -2,10 +2,16 @@
 
 const API_KEY = "ef38ee1c920fe9c4acd96f8dd551173a";
 
+//GLOBAL FUNCTIONS
+
+//declare recent searches container variable -
+const recentSearchesContainer = $("recent-searches-container");
+
+
 //UTILITIES FUNCTIONS
 
 //extract info from local storage (get)
-const getFromLocalStorage = (key, defaultValue) => {
+const readFromLocalStorage = (key, defaultValue) => {
   const parsedData = JSON.parse(localStorage.getItem(key));
   return parsedData ? parsedData : defaultValue;
 };
@@ -55,21 +61,63 @@ const handleFormSubmit = () => {
   // else render weather data
 };
 
-const onReady = () => {
-  //render search history by targeting parent div
-  const recentSearchesContainer = $("recent-searches-container");
-
+//function to render recent city search
+const renderRecentSearches =()=> {
   //get recent searches from LS
   const recentSearches = readFromLocalStorage("recentSearches", []);
-
+  
+  //if recent search has a populated recent search history, render those recent cities
   if (recentSearches.length) {
-    //if recent search has cities, render recent cities
+
+    const createRecentCity = (city) => {
+      return `<li
+        class="list-group-item border-top-0 border-end-0 border-start-0"
+        data-city="${city}"
+      >
+        ${city}
+      </li>`;
+    };
+
+    const recentCities = recentSearches.map(createRecentCity).join("");
+
+console.log (recentCities);
+    // if recent cities search exists, render recent searches list
+    const ul = `<ul class="list-group rounded-0">
+      ${recentCities}
+    </ul>`;
+ 
+      // then append to parent
+      recentSearchesContainer.append(ul);
+    
     // else, empty show alert
   } else {
-    const alert = `<div class="alert alert-warning" role="alert">
-  You have no recent searches!
-</div>`;
+      const alert = `<div class="alert alert-warning" role="alert">
+    You have no recent searches!
+  </div>`;
+
+ // append to parent
+ recentSearchesContainer.append(alert);
   }
 };
 
+const handleRecentSearchClick = async (event) => {
+  const target = $(event.target);
+
+  // restrict clicks only from li
+  if (target.is("li")) {
+    console.log ("search")
+    // get data city attribute
+    const cityName = target.attr("data-city");
+
+    await renderWeatherInfo(cityName);
+  }
+};
+
+
+const onReady = () => {
+renderRecentSearches ();
+  
+};
+
+recentSearchesContainer.click(handleRecentSearchClick);
 $(document).ready(onReady);
