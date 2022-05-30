@@ -5,8 +5,9 @@ const API_KEY = "ef38ee1c920fe9c4acd96f8dd551173a";
 //GLOBAL FUNCTIONS
 
 //declare recent searches container variable -
-const recentSearchesContainer = $("recent-searches-container");
-
+const recentSearchesContainer = $("#recent-searches-container");
+const searchForm = $("#search-form");
+const weatherInfoContainer = $("#weather-info-container");
 
 //UTILITIES FUNCTIONS
 
@@ -26,12 +27,40 @@ const clearLS = () => {
   localStorage.clear();
 };
 
-const renderCities = () => {
-  // get recent cities from LS []
-  // if [] is empty then render alert
-  // else render all recent cities
-  // add an event listener on div containing all cities
+const renderCurrentData = (data) => {
+  const currentWeatherCard = `<div class="today d-flex justify-content-between">
+  <h2>City</h2>
+  <div class="current-weather-card mx-auto d-flex flex-column align-items-center m-1"
+>
+  <h4 class="card-header w-100 text-center">Sunday, 29th May 2022</h4>
+  <div class="card-body">
+    <div class="card-condition d-flex flex-row justify-content-center">
+     <div>
+      <img class="weather-icon d-flex flex-row align-items-center mb-0" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png alt="weather icon"/>
+      </div>
+      </div>
+    <p class="card-text text-center">
+      Temp : Temp <span>&#8451;</span>
+    </p>
+    <p class="card-text text-center">Humidity : 40%</p>
+    <p class="card-text text-center">Wind : 35 MPH</p>
+    <p class="card-text text-center">
+    UV Index :
+    <span class="uvIndex pl-3 pr-3"> High
+</span>
+    </p>
+  </div>
+</div>`;
+weatherInfoContainer.append(currentWeatherCard);
 };
+
+
+// const renderCities = () => {
+//   // get recent cities from LS []
+//   // if [] is empty then render alert
+//   // else render all recent cities
+//   // add an event listener on div containing all cities
+// };
 
 const renderCurrentWeather = (currentWeatherData) => {
   // render the current weather data and append to section
@@ -55,69 +84,102 @@ const renderWeatherData = (cityName) => {
   // render forecast weather data
 };
 
-const handleFormSubmit = () => {
-  // get the city name from input
-  // if city name is empty handle that
-  // else render weather data
+//function to send city submitted to LS and render it in recent search section
+const handleFormSubmit = async (event) => {
+  event.preventDefault();
+
+  // get form input value
+  const cityName = $("#search-input").val();
+
+  // validate
+  if (cityName) {
+    // render weather cards
+    const renderStatus = await renderWeatherInfo(cityName);
+
+    // get recentSearches from LS
+    const recentSearches = readFromLocalStorage("recentSearches", []);
+
+    if (!recentSearches.includes(cityName) && renderStatus) {
+      // push city name to array
+      recentSearches.push(cityName);
+
+      // write recent searches to LS
+      writeToLocalStorage("recentSearches", recentSearches);
+
+      // remove previous items
+      recentSearchesContainer.children().last().remove();
+
+      // re-render recent cities
+      renderRecentSearches();
+    }
+  }
 };
 
 //function to render recent city search
-const renderRecentSearches =()=> {
+const renderRecentSearches = () => {
   //get recent searches from LS
   const recentSearches = readFromLocalStorage("recentSearches", []);
-  
+
   //if recent search has a populated recent search history, render those recent cities
   if (recentSearches.length) {
-
     const createRecentCity = (city) => {
       return `<li
         class="list-group-item border-top-0 border-end-0 border-start-0"
-        data-city="${city}"
-      >
+        data-city="${city}">
         ${city}
       </li>`;
     };
 
     const recentCities = recentSearches.map(createRecentCity).join("");
 
-console.log (recentCities);
     // if recent cities search exists, render recent searches list
-    const ul = `<ul class="list-group rounded-0">
-      ${recentCities}
-    </ul>`;
- 
-      // then append to parent
-      recentSearchesContainer.append(ul);
-    
+    const ul = `<ul class="list-group rounded-0">${recentCities}</ul>`;
+
+    // then append to parent
+    recentSearchesContainer.append(ul);
+
     // else, empty show alert
   } else {
-      const alert = `<div class="alert alert-warning" role="alert">
+    const alert = `<div class="alert alert-warning" role="alert">
     You have no recent searches!
   </div>`;
 
- // append to parent
- recentSearchesContainer.append(alert);
+    // append to parent
+    recentSearchesContainer.append(alert);
   }
 };
 
-const handleRecentSearchClick = async (event) => {
-  const target = $(event.target);
+// const renderErrorAlert = () => {
+//   // empty container
+//   weatherInfoContainer.empty();
 
-  // restrict clicks only from li
-  if (target.is("li")) {
-    console.log ("search")
-    // get data city attribute
-    const cityName = target.attr("data-city");
+//   const alert = `<div class="alert alert-danger" role="alert">
+//     Something went wrong!! Please try again.
+//   </div>`;
 
-    await renderWeatherInfo(cityName);
-  }
+//   weatherInfoContainer.append(alert);
+// };
+
+const renderWeatherInfo = async (cityName) => {
+  const handleRecentSearchClick = async (event) => {
+    const target = $(event.target);
+
+    // restrict clicks only from li
+    if (target.is("li")) {
+      console.log("search");
+
+      // get data city attribute
+      const cityName = target.attr("data-city");
+
+      await renderWeatherInfo(cityName);
+    }
+  };
 };
-
 
 const onReady = () => {
-renderRecentSearches ();
-  
+  renderRecentSearches();
 };
 
 recentSearchesContainer.click(handleRecentSearchClick);
+searchForm.submit(handleFormSubmit);
 $(document).ready(onReady);
