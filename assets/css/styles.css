@@ -30,9 +30,17 @@ li {
     list-style: none;
     }
 
-h2 {
+.today {
     font-family: "Raleway", sans-serif;
+    margin: 40px 15px 10px;
+    text-align: justify;
     }
+
+h2 {
+        font-family: "Raleway", sans-serif;
+        margin: 40px 15px 10px;
+        text-align: right;
+        } 
 
     
 /*header styling*/
@@ -48,14 +56,35 @@ h2 {
   color:#8fe0ff;;
  }
 
+/*search form styling */
+
+.btn
+
+#submit-btn {
+    background-color:#8fe0ff;
+}
+
+
 /*current weather styling */
-
-
 
 .card-title {
   font-family: "Raleway", sans-serif;
 }
 
 .current-weather-card {
-   background-color:#75b4e3 ;
+   background-color:#54416d ;
+   color:#8fe0ff;;
+   width:80%;
+   margin:auto;
+   text-align: left;
 }
+
+/*forecast weather styling */
+.forecast-card {
+    background-color:#8fe0ff ;
+    width:30%;
+    margin:auto;
+    text-align:left;
+    
+}
+
