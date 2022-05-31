@@ -1,44 +1,45 @@
-
-
 /* CSS HEX */
 :root {
   --oxford-blue: #04052eff;
   --midnight-blue: #140152ff;
   --navy-blue: #22007cff;
   --duke-blue: #0d00a4ff;
+  --uvi-low: green;
+  --uvi-moderate: yellow;
+  --uvi-high: orange;
+  --uvi-very-high: crimson;
+  --uvi-extreme: rgb(155, 14, 42);
 }
-
 
 /*whole document styling*/
 
 body {
-    color:#31255a;
-    box-sizing: border-box;
-    font-size: 16px;
-    min-height: 100vh;
-    }
+  color: #31255a;
+  box-sizing: border-box;
+  font-size: 16px;
+  min-height: 100vh;
+}
 
 main {
-    font-family: "Lusitana", serif;
-    }
-      
+  font-family: "Lusitana", serif;
+}
+
 li {
-    list-style: none;
-    }
+  list-style: none;
+}
 
 .today {
-    font-family: "Raleway", sans-serif;
-    margin: 40px 15px 10px;
-    text-align: justify;
-    }
+  font-family: "Raleway", sans-serif;
+  margin: 40px 15px 10px;
+  text-align: justify;
+}
 
 h2 {
-        font-family: "Raleway", sans-serif;
-        margin: 40px 15px 10px;
-        text-align: right;
-        } 
+  font-family: "Raleway", sans-serif;
+  margin: 40px 15px 10px;
+  text-align: right;
+}
 
-    
 /*header styling*/
 
 .header-banner {
@@ -46,43 +47,81 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
+  height: 150px;
   width: 100%;
-  background-color:#2b235a;
-  color:#8fe0ff;;
- }
+  background-color: #2b235a;
+  color: #8fe0ff;
+}
 
 /*search form styling */
 
 #search-form {
-    text-align: center;
+  text-align: center;
 }
 
 .btn {
-    background-color:#8fe0ff;
-  }
-
+  background-color: #8fe0ff;
+}
 
 /*current weather styling */
+
+.my-2 {
+  text-align: center;
+}
 
 .card-title {
   font-family: "Raleway", sans-serif;
 }
 
-.current-weather-card {
-   background-color:#54416d ;
-   color:#8fe0ff;;
-   width:80%;
-   margin:auto;
-   text-align: left;
+.current-weather-info {
+  background-color: #54416d;
+  color: #8fe0ff;
+  width: 80%;
+  margin: auto;
+  margin-top: 60px;
+  text-align: left;
+  border-radius: 5px;
 }
 
 /*forecast weather styling */
 .forecast-card {
-    background-color:#8fe0ff ;
-    width:30%;
-    margin:auto;
-    text-align:left;
-    
+  background-color: #8fe0ff;
+  width: 30%;
+  margin: auto;
+  text-align: left;
 }
 
+/*Used Amelie's colour coding for uv index
+ Colour coding for UV Index*/
+
+.uvi-low {
+  background-color: var(--uvi-low);
+  color: var(--extra-light);
+  color: #2b235a;
+}
+.uvi-moderate {
+  background-color: var(--uvi-moderate);
+  color: var(--extra-dark);
+  color: #2b235a;
+}
+.uvi-high {
+  background-color: var(--uvi-high);
+  color: var(--extra-dark);
+}
+.uvi-very-high {
+  background-color: var(--uvi-very-high);
+  color: var(--extra-light);
+}
+.uvi-extreme {
+  background-color: var(--uvi-extreme);
+  color: var(--extra-light);
+}
+
+/*Media query for mobile screens*/
+@media screen and (max-width: 590px) {
+  .forecast-card {
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}

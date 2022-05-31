@@ -1,11 +1,7 @@
-//GLOBAL FUNCTIONS
 const recentSearchesContainer = $("#recent-searches-container");
-const searchForm = $("#search-form");
 const weatherInfoContainer = $("#weather-info-container");
+const searchForm = $("#search-form");
 
-//UTILITIES FUNCTIONS
-
-//extract info from local storage (get)
 const readFromLocalStorage = (key, defaultValue) => {
   // get from LS using key name
   const dataFromLS = localStorage.getItem(key);
@@ -20,7 +16,6 @@ const readFromLocalStorage = (key, defaultValue) => {
   }
 };
 
-//write info into local storage (set)
 const writeToLocalStorage = (key, value) => {
   // convert value to string
   const stringifiedValue = JSON.stringify(value);
@@ -29,7 +24,6 @@ const writeToLocalStorage = (key, value) => {
   localStorage.setItem(key, stringifiedValue);
 };
 
-//API call
 const constructUrl = (baseUrl, params) => {
   const queryParams = new URLSearchParams(params).toString();
 
@@ -44,7 +38,7 @@ const fetchData = async (url, options = {}) => {
       const data = await response.json();
       return data;
     } else {
-      throw new Error("Failed to get weather data");
+      throw new Error("Failed to fetch data");
     }
   } catch (error) {
     throw new Error(error.message);
@@ -53,69 +47,73 @@ const fetchData = async (url, options = {}) => {
 
 const getUviClassName = (uvi) => {
   if (uvi >= 0 && uvi <= 2) {
-    return "bg-success";
+    return "uvi-low";
   }
 
-  if (uvi > 2 && uvi <= 8) {
-    return "bg-warning";
+  if (uvi > 2 && uvi <= 6) {
+    return "uvi-moderate";
   }
+  if (uvi > 6 && uvi <= 8) {
+    return "uvi-high";
+  }
+
   if (uvi > 8) {
-    return "bg-danger";
+    return "uvi-very-high";
   }
 };
 
 const renderCurrentData = (data) => {
-  const currentWeatherCard = `<div class="p-3">
+  const currentWeatherCard = `<div class="p-3 current-weather-info">
     <div class="text-center">
-      <h2 class="my-2">${data.cityName}</h2>
-      <h3 class="my-2">${moment
+      <h2 class="my-2 mt-5 fw-bold fs-4">${data.cityName}</h2>
+      <h3 class="my-2 fs-4">${moment
         .unix(data.weatherData.current.dt + data.weatherData.timezone_offset)
-        .format("dddd, Do MMM, YYYY HH:mm:ss")}</h3>
+        .format("dddd, Do MMM, YYYY")}</h3>
       <div>
-        <img
+        <div>
+             <img
           src="http://openweathermap.org/img/w/${
             data.weatherData.current.weather[0].icon
           }.png"
           alt="weather icon"
-          class="shadow-sm p-3 mt-3 bg-body rounded border"
+          class="weather-icon shadow-sm p-3 mt-3 bg-body rounded border"
         />
       </div>
     </div>
-    <!-- weather metric div -->
-    <div class="mt-4">
+       <div class="mt-4">
       <div class="row g-0">
-        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+        <div class="col-sm-12 col-md-4 p-2 text-md-start fw-bold">
           Temperature
         </div>
-        <div class="col-sm-12 col-md-8 p-2 border">${
+        <div class="text-md-start col-sm-12 col-md-8 p-2">${
           data.weatherData.current.temp
         }&deg; C</div>
       </div>
       <div class="row g-0">
-        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+        <div class=" text-md-start col-sm-12 col-md-4 p-2 fw-bold">
           Humidity
         </div>
-        <div class="col-sm-12 col-md-8 p-2 border">${
+        <div class="text-md-start col-sm-12 col-md-8 p-2">${
           data.weatherData.current.humidity
         }&percnt;</div>
       </div>
       <div class="row g-0">
-        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+        <div class="text-md-start col-sm-12 col-md-4 p-2 fw-bold">
           Wind Speed
         </div>
-        <div class="col-sm-12 col-md-8 p-2 border">${
+        <div class=" text-md-start col-sm-12 col-md-8 p-2">${
           data.weatherData.current.wind_speed
         } MPH</div>
       </div>
       <div class="row g-0">
-        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+        <div class="text-md-start col-sm-12 col-md-4 p-2 fw-bold">
           UV Index
         </div>
-        <div class="col-sm-12 col-md-8 p-2 border">
-          <span class="text-white px-3 rounded-2 ${getUviClassName(
+        <div class=" text-md-start col-sm-12 col-md-8 p-2">
+          <span class="text-md-start text-white px-3 rounded-2 ${getUviClassName(
             data.weatherData.current.uvi
           )}">${data.weatherData.current.uvi}</span>
-        </div>
+         </div>
       </div>
     </div>
   </div>`;
@@ -129,7 +127,7 @@ const renderForecastData = (data) => {
       <div class="d-flex justify-content-center">
         <img
           src="http://openweathermap.org/img/w/${each.weather[0].icon}.png"
-          class="shadow-sm p-3 mt-3 bg-body rounded border card-img-top weather-icon"
+          class="class="shadow-sm p-3 mt-3 bg-body rounded border"
           alt="weather icon"
         />
       </div>
@@ -148,7 +146,7 @@ const renderForecastData = (data) => {
             <div class="col-12 p-2 border bg-light fw-bold">
               Humidity
             </div>
-            <div class="col-12 p-2 border">${each.humidity}&percent;</div>
+            <div class="col-12 p-2 border">${each.humidity}&percnt;</div>
           </div>
           <div class="row g-0">
             <div class="col-12 p-2 border bg-light fw-bold">
@@ -163,7 +161,9 @@ const renderForecastData = (data) => {
             <div class="col-12 p-2 border">
               <span class="text-white px-3 rounded-2 ${getUviClassName(
                 each.uvi
-              )}">${each.uvi}</span>
+              )}"
+                >${each.uvi}</span
+              >
             </div>
           </div>
         </div>
@@ -179,7 +179,7 @@ const renderForecastData = (data) => {
     .join("");
 
   const forecastWeatherCards = `<div>
-    <h2 class="mt-3 text-center">5-day Forecast</h2>
+    <h2 class="mt-5 fs-4 text-center">5-day Forecast</h2>
     <hr />
     <div class="d-flex flex-row justify-content-center flex-wrap">
       ${forecastCards}
@@ -193,6 +193,7 @@ const renderRecentSearches = () => {
   // get recent searches from LS
   const recentSearches = readFromLocalStorage("recentSearches", []);
 
+  // ["foo", "bar"]
   if (recentSearches.length) {
     const createRecentCity = (city) => {
       return `<li
@@ -255,8 +256,6 @@ const renderWeatherInfo = async (cityName) => {
   }
 };
 
-//function to render recent city search
-
 const fetchWeatherData = async (cityName) => {
   // fetch data from API
   // current data url
@@ -264,7 +263,7 @@ const fetchWeatherData = async (cityName) => {
     "https://api.openweathermap.org/data/2.5/weather",
     {
       q: cityName,
-      appid: ef38ee1c920fe9c4acd96f8dd551173a,
+      appid: "e5cd5aafaf451f96b10b7a70a90ea75b",
     }
   );
 
@@ -283,7 +282,7 @@ const fetchWeatherData = async (cityName) => {
       lon: lon,
       exclude: "minutely,hourly",
       units: "metric",
-      appid: "ef38ee1c920fe9c4acd96f8dd551173a",
+      appid: "e5cd5aafaf451f96b10b7a70a90ea75b",
     }
   );
 
@@ -300,8 +299,6 @@ const handleRecentSearchClick = async (event) => {
 
   // restrict clicks only from li
   if (target.is("li")) {
-    console.log("search");
-
     // get data city attribute
     const cityName = target.attr("data-city");
 
@@ -309,7 +306,6 @@ const handleRecentSearchClick = async (event) => {
   }
 };
 
-//function to send city submitted to LS and render it in recent search section
 const handleFormSubmit = async (event) => {
   event.preventDefault();
 
