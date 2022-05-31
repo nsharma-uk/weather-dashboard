@@ -1,9 +1,4 @@
-//API key
-
-const API_KEY = "ef38ee1c920fe9c4acd96f8dd551173a";
-
 //GLOBAL FUNCTIONS
-
 const recentSearchesContainer = $("#recent-searches-container");
 const searchForm = $("#search-form");
 const weatherInfoContainer = $("#weather-info-container");
@@ -12,21 +7,29 @@ const weatherInfoContainer = $("#weather-info-container");
 
 //extract info from local storage (get)
 const readFromLocalStorage = (key, defaultValue) => {
-  const parsedData = JSON.parse(localStorage.getItem(key));
-  return parsedData ? parsedData : defaultValue;
+  // get from LS using key name
+  const dataFromLS = localStorage.getItem(key);
+
+  // parse data from LS
+  const parsedData = JSON.parse(dataFromLS);
+
+  if (parsedData) {
+    return parsedData;
+  } else {
+    return defaultValue;
+  }
 };
 
 //write info into local storage (set)
 const writeToLocalStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  // convert value to string
+  const stringifiedValue = JSON.stringify(value);
+
+  // set stringified value to LS for key name
+  localStorage.setItem(key, stringifiedValue);
 };
 
-// //empty local storage (clear)
-// const clearLS = () => {
-//   localStorage.clear();
-// };
-
-//API CALL
+//API call
 const constructUrl = (baseUrl, params) => {
   const queryParams = new URLSearchParams(params).toString();
 
@@ -41,7 +44,7 @@ const fetchData = async (url, options = {}) => {
       const data = await response.json();
       return data;
     } else {
-      throw new Error("Failed to fetch data");
+      throw new Error("Failed to get weather data");
     }
   } catch (error) {
     throw new Error(error.message);
@@ -62,33 +65,61 @@ const getUviClassName = (uvi) => {
 };
 
 const renderCurrentData = (data) => {
-  const currentWeatherCard = `<div class="today d-flex justify-content-between">
-  <h2>City</h2>
-  <div class="current-weather-card mx-auto d-flex flex-column align-items-center m-1"
->
-  <h4 class="card-header w-100 text-center">Sunday, 29th May 2022</h4>
-  <div class="card-body">
-    <div class="card-condition d-flex flex-row justify-content-center">
-     <div>
-      <img class="weather-icon d-flex flex-row align-items-center mb-0" src=https://openweathermap.org/img/wn/${
-        each.weatherIcon
-      }.png alt="weather icon"/>
+  const currentWeatherCard = `<div class="p-3">
+    <div class="text-center">
+      <h2 class="my-2">${data.cityName}</h2>
+      <h3 class="my-2">${moment
+        .unix(data.weatherData.current.dt + data.weatherData.timezone_offset)
+        .format("dddd, Do MMM, YYYY HH:mm:ss")}</h3>
+      <div>
+        <img
+          src="http://openweathermap.org/img/w/${
+            data.weatherData.current.weather[0].icon
+          }.png"
+          alt="weather icon"
+          class="shadow-sm p-3 mt-3 bg-body rounded border"
+        />
       </div>
+    </div>
+    <!-- weather metric div -->
+    <div class="mt-4">
+      <div class="row g-0">
+        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+          Temperature
+        </div>
+        <div class="col-sm-12 col-md-8 p-2 border">${
+          data.weatherData.current.temp
+        }&deg; C</div>
       </div>
-    <p class="card-text text-center">
-      Temp : Temp <span>&#8451;</span>
-    </p>
-    <p class="card-text text-center">Humidity : 40%</p>
-    <p class="card-text text-center">Wind : 35 MPH</p>
-    <p class="card-text text-center">
-    UV Index :
-    <span class="uvIndex pl-3 pr-3">${getUviClassName(
-      data.weatherData.current.uvi
-    )}">${data.weatherData.current.uvi}
-</span>
-    </p>
-  </div>
-</div>`;
+      <div class="row g-0">
+        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+          Humidity
+        </div>
+        <div class="col-sm-12 col-md-8 p-2 border">${
+          data.weatherData.current.humidity
+        }&percnt;</div>
+      </div>
+      <div class="row g-0">
+        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+          Wind Speed
+        </div>
+        <div class="col-sm-12 col-md-8 p-2 border">${
+          data.weatherData.current.wind_speed
+        } MPH</div>
+      </div>
+      <div class="row g-0">
+        <div class="col-sm-12 col-md-4 p-2 border bg-light fw-bold">
+          UV Index
+        </div>
+        <div class="col-sm-12 col-md-8 p-2 border">
+          <span class="text-white px-3 rounded-2 ${getUviClassName(
+            data.weatherData.current.uvi
+          )}">${data.weatherData.current.uvi}</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
   weatherInfoContainer.append(currentWeatherCard);
 };
 
@@ -141,35 +172,141 @@ const renderForecastData = (data) => {
 
     return forecast;
   };
+
+  const forecastCards = data.weatherData.daily
+    .slice(1, 6)
+    .map(createForecastCard)
+    .join("");
+
+  const forecastWeatherCards = `<div>
+    <h2 class="mt-3 text-center">5-day Forecast</h2>
+    <hr />
+    <div class="d-flex flex-row justify-content-center flex-wrap">
+      ${forecastCards}
+    </div>
+  </div>`;
+
+  weatherInfoContainer.append(forecastWeatherCards);
 };
 
-// const renderCities = () => {
-//   // get recent cities from LS []
-//   // if [] is empty then render alert
-//   // else render all recent cities
-//   // add an event listener on div containing all cities
-// };
+const renderRecentSearches = () => {
+  // get recent searches from LS
+  const recentSearches = readFromLocalStorage("recentSearches", []);
 
-const renderCurrentWeather = (currentWeatherData) => {
-  // render the current weather data and append to section
+  if (recentSearches.length) {
+    const createRecentCity = (city) => {
+      return `<li
+        class="list-group-item border-top-0 border-end-0 border-start-0"
+        data-city="${city}"
+      >
+        ${city}
+      </li>`;
+    };
+
+    const recentCities = recentSearches.map(createRecentCity).join("");
+
+    // if render recent searches list
+    const ul = `<ul class="list-group rounded-0">
+      ${recentCities}
+    </ul>`;
+
+    // append to parent
+    recentSearchesContainer.append(ul);
+  } else {
+    // else empty show alert
+    const alert = `<div class="alert alert-warning" role="alert">
+      You have no recent searches.
+    </div>`;
+
+    // append to parent
+    recentSearchesContainer.append(alert);
+  }
 };
 
-const renderForecastWeather = (forecastWeatherData) => {
-  // render the forecast weather data and append each card to section
+const renderErrorAlert = () => {
+  // empty container
+  weatherInfoContainer.empty();
+
+  const alert = `<div class="alert alert-danger" role="alert">
+    Something went wrong!! Please try again.
+  </div>`;
+
+  weatherInfoContainer.append(alert);
 };
 
-const renderWeatherData = (cityName) => {
-  // use API to fetch current weather data
-  const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`;
+const renderWeatherInfo = async (cityName) => {
+  try {
+    // fetch weather data
+    const weatherData = await fetchWeatherData(cityName);
 
-  // from the response cherry pick all the data you want to see in the current weather card
+    // empty container
+    weatherInfoContainer.empty();
 
-  // get the lat and lon from current weather data API response
-  const forecastWeatherUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly&units=metric&appid=${API_KEY}`;
+    // render current data
+    renderCurrentData(weatherData);
 
-  // render current weather data
-  renderCurrentData();
-  // render forecast weather data
+    // render forecast data
+    renderForecastData(weatherData);
+
+    return true;
+  } catch (error) {
+    renderErrorAlert();
+    return false;
+  }
+};
+
+//function to render recent city search
+
+const fetchWeatherData = async (cityName) => {
+  // fetch data from API
+  // current data url
+  const currentDataUrl = constructUrl(
+    "https://api.openweathermap.org/data/2.5/weather",
+    {
+      q: cityName,
+      appid: ef38ee1c920fe9c4acd96f8dd551173a,
+    }
+  );
+
+  const currentData = await fetchData(currentDataUrl);
+
+  // get lat, lon and city name
+  const lat = currentData?.coord?.lat;
+  const lon = currentData?.coord?.lon;
+  const displayCityName = currentData?.name;
+
+  // forecast url
+  const forecastDataUrl = constructUrl(
+    "https://api.openweathermap.org/data/2.5/onecall",
+    {
+      lat: lat,
+      lon: lon,
+      exclude: "minutely,hourly",
+      units: "metric",
+      appid: "ef38ee1c920fe9c4acd96f8dd551173a",
+    }
+  );
+
+  const forecastData = await fetchData(forecastDataUrl);
+
+  return {
+    cityName: displayCityName,
+    weatherData: forecastData,
+  };
+};
+
+const handleRecentSearchClick = async (event) => {
+  const target = $(event.target);
+
+  // restrict clicks only from li
+  if (target.is("li")) {
+    console.log("search");
+
+    // get data city attribute
+    const cityName = target.attr("data-city");
+
+    await renderWeatherInfo(cityName);
+  }
 };
 
 //function to send city submitted to LS and render it in recent search section
@@ -200,124 +337,6 @@ const handleFormSubmit = async (event) => {
       // re-render recent cities
       renderRecentSearches();
     }
-  }
-};
-
-//function to render recent city search
-const renderRecentSearches = () => {
-  //get recent searches from LS
-  const recentSearches = readFromLocalStorage("recentSearches", []);
-
-  //if recent search has a populated recent search history, render those recent cities
-  if (recentSearches.length) {
-    const createRecentCity = (city) => {
-      return `<li
-        class="list-group-item border-top-0 border-end-0 border-start-0"
-        data-city="${city}">
-        ${city}
-      </li>`;
-    };
-
-    const recentCities = recentSearches.map(createRecentCity).join("");
-
-    // if recent cities search exists, render recent searches list
-    const ul = `<ul class="list-group rounded-0">${recentCities}</ul>`;
-
-    // then append to parent
-    recentSearchesContainer.append(ul);
-
-    // else, empty show alert
-  } else {
-    const alert = `<div class="alert alert-warning" role="alert">
-    You have no recent searches!
-  </div>`;
-
-    // append to parent
-    recentSearchesContainer.append(alert);
-  }
-};
-
-const fetchWeatherData = async (cityName) => {
-  // fetch data from API
-  // current data url
-  const currentDataUrl = constructUrl(
-    "https://api.openweathermap.org/data/2.5/weather",
-    {
-      q: cityName,
-      appid: API_KEY,
-    }
-  );
-
-  const currentData = await fetchData(currentDataUrl);
-
-  // get lat, lon and city name
-  const lat = currentData?.coord?.lat;
-  const lon = currentData?.coord?.lon;
-  const displayCityName = currentData?.name;
-
-  // forecast url
-  const forecastDataUrl = constructUrl(
-    "https://api.openweathermap.org/data/2.5/onecall",
-    {
-      lat: lat,
-      lon: lon,
-      exclude: "minutely,hourly",
-      units: "metric",
-      appid: "API_KEY",
-    }
-  );
-
-  const forecastData = await fetchData(forecastDataUrl);
-
-  return {
-    cityName: displayCityName,
-    weatherData: forecastData,
-  };
-};
-
-// const renderErrorAlert = () => {
-//   // empty container
-//   weatherInfoContainer.empty();
-
-//   const alert = `<div class="alert alert-danger" role="alert">
-//     Something went wrong!! Please try again.
-//   </div>`;
-
-//   weatherInfoContainer.append(alert);
-// };
-
-const handleRecentSearchClick = async (event) => {
-  const target = $(event.target);
-
-  // restrict clicks only from li
-  if (target.is("li")) {
-    console.log("search");
-
-    // get data city attribute
-    const cityName = target.attr("data-city");
-
-    await renderWeatherInfo(cityName);
-  }
-};
-
-const renderWeatherInfo = async (cityName) => {
-  try {
-    // fetch weather data
-    const weatherData = await fetchWeatherData(cityName);
-
-    // empty container
-    weatherInfoContainer.empty();
-
-    // render current data
-    renderCurrentData(weatherData);
-
-    // render forecast data
-    renderForecastData(weatherData);
-
-    return true;
-  } catch (error) {
-    renderErrorAlert();
-    return false;
   }
 };
 
