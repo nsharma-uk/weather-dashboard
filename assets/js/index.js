@@ -4,7 +4,6 @@ const API_KEY = "ef38ee1c920fe9c4acd96f8dd551173a";
 
 //GLOBAL FUNCTIONS
 
-//declare recent searches container variable -
 const recentSearchesContainer = $("#recent-searches-container");
 const searchForm = $("#search-form");
 const weatherInfoContainer = $("#weather-info-container");
@@ -22,9 +21,44 @@ const writeToLocalStorage = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
-//empty local storage (clear)
-const clearLS = () => {
-  localStorage.clear();
+// //empty local storage (clear)
+// const clearLS = () => {
+//   localStorage.clear();
+// };
+
+//API CALL
+const constructUrl = (baseUrl, params) => {
+  const queryParams = new URLSearchParams(params).toString();
+
+  return queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
+};
+
+const fetchData = async (url, options = {}) => {
+  try {
+    const response = await fetch(url, options);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Failed to fetch data");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const getUviClassName = (uvi) => {
+  if (uvi >= 0 && uvi <= 2) {
+    return "bg-success";
+  }
+
+  if (uvi > 2 && uvi <= 8) {
+    return "bg-warning";
+  }
+  if (uvi > 8) {
+    return "bg-danger";
+  }
 };
 
 const renderCurrentData = (data) => {
@@ -36,7 +70,9 @@ const renderCurrentData = (data) => {
   <div class="card-body">
     <div class="card-condition d-flex flex-row justify-content-center">
      <div>
-      <img class="weather-icon d-flex flex-row align-items-center mb-0" src=https://openweathermap.org/img/wn/${each.weatherIcon}.png alt="weather icon"/>
+      <img class="weather-icon d-flex flex-row align-items-center mb-0" src=https://openweathermap.org/img/wn/${
+        each.weatherIcon
+      }.png alt="weather icon"/>
       </div>
       </div>
     <p class="card-text text-center">
@@ -46,14 +82,66 @@ const renderCurrentData = (data) => {
     <p class="card-text text-center">Wind : 35 MPH</p>
     <p class="card-text text-center">
     UV Index :
-    <span class="uvIndex pl-3 pr-3"> High
+    <span class="uvIndex pl-3 pr-3">${getUviClassName(
+      data.weatherData.current.uvi
+    )}">${data.weatherData.current.uvi}
 </span>
     </p>
   </div>
 </div>`;
-weatherInfoContainer.append(currentWeatherCard);
+  weatherInfoContainer.append(currentWeatherCard);
 };
 
+const renderForecastData = (data) => {
+  const createForecastCard = (each) => {
+    const forecast = `<div class="card m-2 forecast-card">
+      <div class="d-flex justify-content-center">
+        <img
+          src="http://openweathermap.org/img/w/${each.weather[0].icon}.png"
+          class="shadow-sm p-3 mt-3 bg-body rounded border card-img-top weather-icon"
+          alt="weather icon"
+        />
+      </div>
+      <div class="card-body">
+        <h5 class="card-title text-center">${moment
+          .unix(each.dt)
+          .format("ddd, Do MMM")}</h5>
+        <div class="mt-4 text-center">
+          <div class="row g-0">
+            <div class="col-12 p-2 border bg-light fw-bold">
+              Temperature
+            </div>
+            <div class="col-12 p-2 border">${each.temp.day}&deg; C</div>
+          </div>
+          <div class="row g-0">
+            <div class="col-12 p-2 border bg-light fw-bold">
+              Humidity
+            </div>
+            <div class="col-12 p-2 border">${each.humidity}&percent;</div>
+          </div>
+          <div class="row g-0">
+            <div class="col-12 p-2 border bg-light fw-bold">
+              Wind Speed
+            </div>
+            <div class="col-12 p-2 border">${each.wind_speed} MPH</div>
+          </div>
+          <div class="row g-0">
+            <div class="col-12 p-2 border bg-light fw-bold">
+              UV Index
+            </div>
+            <div class="col-12 p-2 border">
+              <span class="text-white px-3 rounded-2 ${getUviClassName(
+                each.uvi
+              )}">${each.uvi}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+    return forecast;
+  };
+};
 
 // const renderCities = () => {
 //   // get recent cities from LS []
@@ -80,7 +168,7 @@ const renderWeatherData = (cityName) => {
   const forecastWeatherUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly&units=metric&appid=${API_KEY}`;
 
   // render current weather data
-
+  renderCurrentData();
   // render forecast weather data
 };
 
@@ -149,6 +237,44 @@ const renderRecentSearches = () => {
   }
 };
 
+const fetchWeatherData = async (cityName) => {
+  // fetch data from API
+  // current data url
+  const currentDataUrl = constructUrl(
+    "https://api.openweathermap.org/data/2.5/weather",
+    {
+      q: cityName,
+      appid: API_KEY,
+    }
+  );
+
+  const currentData = await fetchData(currentDataUrl);
+
+  // get lat, lon and city name
+  const lat = currentData?.coord?.lat;
+  const lon = currentData?.coord?.lon;
+  const displayCityName = currentData?.name;
+
+  // forecast url
+  const forecastDataUrl = constructUrl(
+    "https://api.openweathermap.org/data/2.5/onecall",
+    {
+      lat: lat,
+      lon: lon,
+      exclude: "minutely,hourly",
+      units: "metric",
+      appid: "API_KEY",
+    }
+  );
+
+  const forecastData = await fetchData(forecastDataUrl);
+
+  return {
+    cityName: displayCityName,
+    weatherData: forecastData,
+  };
+};
+
 // const renderErrorAlert = () => {
 //   // empty container
 //   weatherInfoContainer.empty();
@@ -160,20 +286,39 @@ const renderRecentSearches = () => {
 //   weatherInfoContainer.append(alert);
 // };
 
+const handleRecentSearchClick = async (event) => {
+  const target = $(event.target);
+
+  // restrict clicks only from li
+  if (target.is("li")) {
+    console.log("search");
+
+    // get data city attribute
+    const cityName = target.attr("data-city");
+
+    await renderWeatherInfo(cityName);
+  }
+};
+
 const renderWeatherInfo = async (cityName) => {
-  const handleRecentSearchClick = async (event) => {
-    const target = $(event.target);
+  try {
+    // fetch weather data
+    const weatherData = await fetchWeatherData(cityName);
 
-    // restrict clicks only from li
-    if (target.is("li")) {
-      console.log("search");
+    // empty container
+    weatherInfoContainer.empty();
 
-      // get data city attribute
-      const cityName = target.attr("data-city");
+    // render current data
+    renderCurrentData(weatherData);
 
-      await renderWeatherInfo(cityName);
-    }
-  };
+    // render forecast data
+    renderForecastData(weatherData);
+
+    return true;
+  } catch (error) {
+    renderErrorAlert();
+    return false;
+  }
 };
 
 const onReady = () => {
