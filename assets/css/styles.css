@@ -92,12 +92,14 @@ h2 {
 
 /*forecast weather styling */
 .forecast-card {
-  background-color: #54416d;
+  
   color: #8fe0ff;
   width: 25%;
   margin: auto;
   text-align: left;
 }
+
+.card {background-color: #54416d;}
 
 /*Used Amelie's colour coding for uv index
  Colour coding for UV Index*/
