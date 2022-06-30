@@ -1,0 +1,158 @@
+/* CSS HEX */
+:root {
+  --oxford-blue: #04052eff;
+  --midnight-blue: #140152ff;
+  --navy-blue: #22007cff;
+  --duke-blue: #0d00a4ff;
+  --extra-dark: #112b3c;
+  --dark: #1c658c;
+  --medium: #398ab9;
+  --light: #d8d2cb;
+  --extra-light: #eeeeee;
+  --alert: #fae5a5;
+  --invalid: crimson;
+  --uvi-low: green;
+  --uvi-moderate: yellow;
+  --uvi-high: orange;
+  --uvi-very-high: crimson;
+  --uvi-extreme: rgb(155, 14, 42);
+}
+
+/*whole document styling*/
+
+body {
+  color: #31255a;
+  box-sizing: border-box;
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+main {
+  font-family: "Lusitana", serif;
+}
+
+li {
+  list-style: none;
+}
+
+.today {
+  font-family: "Raleway", sans-serif;
+  margin: 40px 15px 10px;
+  text-align: justify;
+}
+
+h2 {
+  font-family: "Raleway", sans-serif;
+  margin: 40px 15px 10px;
+  text-align: right;
+}
+
+/*header styling*/
+
+.header-banner {
+  font-family: "Raleway", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 100%;
+  background-color: #2b235a;
+  color: #8fe0ff;
+}
+
+/*search form styling */
+
+#search-form {
+  text-align: center;
+}
+
+.btn {
+  background-color: #8fe0ff;
+}
+
+/*current weather styling */
+
+.my-2 {
+  text-align: center;
+}
+
+.card-title {
+  font-family: "Raleway", sans-serif;
+}
+
+.current-weather-info {
+  background-color: #54416d;
+  color: #8fe0ff;
+  width: 80%;
+  margin: auto;
+  margin-top: 60px;
+  text-align: left;
+  border-radius: 5px;
+}
+
+/*forecast weather styling */
+.forecast-card {
+  
+  color: #8fe0ff;
+  width: 25%;
+  margin: auto;
+  text-align: left;
+}
+
+.card {background-color: #54416d;}
+
+/*Used Amelie's colour coding for uv index
+ Colour coding for UV Index*/
+
+.uvi-low {
+  background-color: var(--uvi-low);
+  color: var(--extra-light);
+}
+.uvi-moderate {
+  background-color: var(--uvi-moderate);
+  color: var(--extra-dark);
+}
+.uvi-high {
+  background-color: var(--uvi-high);
+  color: var(--extra-dark);
+}
+.uvi-very-high {
+  background-color: var(--uvi-very-high);
+  color: var(--extra-light);
+}
+.uvi-extreme {
+  background-color: var(--uvi-extreme);
+  color: var(--extra-light);
+}
+
+/*Footer styles*/
+.footer {
+  padding: 10px 0;
+  letter-spacing: 0.4m;
+  width: 100%;
+  margin: auto;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.social-icon {
+  transition: color 0.2s;
+  text-decoration: none;
+  font-size: 30px;
+  padding: 4px;
+  margin: 3px;
+}
+
+/*Media query for mobile screens*/
+@media screen and (max-width: 590px) {
+  .forecast-card {
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
