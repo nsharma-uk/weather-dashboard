@@ -92,14 +92,15 @@ h2 {
 
 /*forecast weather styling */
 .forecast-card {
-  
   color: #8fe0ff;
   width: 25%;
   margin: auto;
   text-align: left;
 }
 
-.card {background-color: #54416d;}
+.card {
+  background-color: #54416d;
+}
 
 /*Used Amelie's colour coding for uv index
  Colour coding for UV Index*/
@@ -127,10 +128,12 @@ h2 {
 
 /*Footer styles*/
 .footer {
-  padding: 10px 0;
+  background-color: #2b235a;
+  color: #8fe0ff;
+  padding-top: 10px;
   letter-spacing: 0.4m;
   width: 100%;
-  margin: auto;
+  margin-top: 30px;
 }
 
 .footer-container {
@@ -138,14 +141,15 @@ h2 {
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
 }
 
 .social-icon {
-  transition: color 0.2s;
   text-decoration: none;
-  font-size: 30px;
+  font-size: 1.4rem;
   padding: 4px;
   margin: 3px;
+  color: #8fe0ff;
 }
 
 /*Media query for mobile screens*/
