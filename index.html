@@ -43,16 +43,16 @@
     </header>
 
     <!--main section-->
-    <main class="min-vh-100">
+    <main class="main pl-6 pr-4 min-vh-100">
       <!-- content row -->
       <div class="row g-0">
         <!-- col for form and recent searches -->
-        <div class="col-sm-12 col-md-3 border">
+        <div class="col-sm-12 col-md-3">
           <!-- search form -->
           <div>
-            <h2 class="mt-3 text-center fs-4">Search Form</h2>
-            <hr />
-            <form class="p-3" id="search-form">
+            <h2 class="mt-5 text-center fs-2">Search Form</h2>
+
+            <form class="m-3" id="search-form">
               <div class="mb-3">
                 <input
                   type="text"
@@ -62,20 +62,19 @@
                 />
               </div>
               <div class="d-grid gap-2">
-                <button type="submit" class="btn">Search</button>
+                <button type="submit" class="btn search-btn">Search</button>
               </div>
             </form>
           </div>
 
           <!-- recent searches -->
-          <div id="recent-searches-container">
-            <h2 class="mt-3 text-center fs-4">Search History</h2>
-            <hr />
+          <div id="recent-searches-container" class="d-grid gap-6 m-3">
+            <h2 class="p-2 mt-0 text-center fs-2">Search History</h2>
           </div>
         </div>
 
         <!-- column for weather info -->
-        <div class="col-sm-12 col-md-9" id="weather-info-container"></div>
+        <div class="col-sm-12 col-md-8" id="weather-info-container"></div>
       </div>
     </main>
     <!--web footer section-->

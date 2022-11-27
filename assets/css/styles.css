@@ -24,11 +24,10 @@ body {
   color: #31255a;
   box-sizing: border-box;
   font-size: 16px;
-  min-height: 100vh;
+  font-family: "Raleway", sans-serif;
 }
 
 main {
-  font-family: "Lusitana", serif;
 }
 
 li {
@@ -36,7 +35,6 @@ li {
 }
 
 .today {
-  font-family: "Raleway", sans-serif;
   margin: 40px 15px 10px;
   text-align: justify;
 }
@@ -50,7 +48,6 @@ h2 {
 /*header styling*/
 
 .header-banner {
-  font-family: "Raleway", sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,7 +63,7 @@ h2 {
   text-align: center;
 }
 
-.btn {
+.search-btn {
   background-color: #8fe0ff;
 }
 
@@ -95,15 +92,11 @@ h2 {
   color: #8fe0ff;
   width: 25%;
   margin: auto;
-  text-align: left;
 }
 
 .card {
   background-color: #54416d;
 }
-
-/*Used Amelie's colour coding for uv index
- Colour coding for UV Index*/
 
 .uvi-low {
   background-color: var(--uvi-low);

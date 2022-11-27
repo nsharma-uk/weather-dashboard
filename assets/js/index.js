@@ -65,8 +65,8 @@ const getUviClassName = (uvi) => {
 const renderCurrentData = (data) => {
   const currentWeatherCard = `<div class="p-3 current-weather-info">
     <div class="text-center">
-      <h2 class="my-2 mt-5 fw-bold fs-4">${data.cityName}</h2>
-      <h3 class="my-2 fs-4">${moment
+      <h2 tabindex=0 class="my-2 mt-5 fw-bold fs-4">${data.cityName}</h2>
+      <h3 tabindex=0 class="my-2 fs-4">${moment
         .unix(data.weatherData.current.dt + data.weatherData.timezone_offset)
         .format("dddd, Do MMM, YYYY")}</h3>
       <div>
@@ -82,35 +82,35 @@ const renderCurrentData = (data) => {
     </div>
        <div class="mt-4">
       <div class="row g-0">
-        <div class="col-sm-12 col-md-4 p-2 text-md-start fw-bold">
+        <div tabindex=0 class="col-sm-12 col-md-4 p-2 text-md-start fw-bold">
           Temperature
         </div>
-        <div class="text-md-start col-sm-12 col-md-8 p-2">${
+        <div tabindex=0 class="text-md-start col-sm-12 col-md-8 p-2">${
           data.weatherData.current.temp
         }&deg; C</div>
       </div>
       <div class="row g-0">
-        <div class=" text-md-start col-sm-12 col-md-4 p-2 fw-bold">
+        <div tabindex=0 class=" text-md-start col-sm-12 col-md-4 p-2 fw-bold">
           Humidity
         </div>
-        <div class="text-md-start col-sm-12 col-md-8 p-2">${
+        <div tabindex=0 class="text-md-start col-sm-12 col-md-8 p-2">${
           data.weatherData.current.humidity
         }&percnt;</div>
       </div>
       <div class="row g-0">
-        <div class="text-md-start col-sm-12 col-md-4 p-2 fw-bold">
+        <div tabindex=0 class="text-md-start col-sm-12 col-md-4 p-2 fw-bold">
           Wind Speed
         </div>
-        <div class=" text-md-start col-sm-12 col-md-8 p-2">${
+        <div tabindex=0 class=" text-md-start col-sm-12 col-md-8 p-2">${
           data.weatherData.current.wind_speed
         } MPH</div>
       </div>
       <div class="row g-0">
-        <div class="text-md-start col-sm-12 col-md-4 p-2 fw-bold">
+        <div tabindex=0 class="text-md-start col-sm-12 col-md-4 p-2 fw-bold">
           UV Index
         </div>
         <div class="text-md-start col-sm-12 col-md-8 p-2">
-          <span class="text-md-start px-3 rounded-2 ${getUviClassName(
+          <span tabindex=0 class="text-md-start px-3 rounded-2 ${getUviClassName(
             data.weatherData.current.uvi
           )}">${data.weatherData.current.uvi}</span>
          </div>
@@ -133,33 +133,33 @@ const renderForecastData = (data) => {
         />
       </div>
       <div class="card-body">
-        <h5 class="card-title text-center">${moment
+        <h5 tabindex=0 class="card-title text-center">${moment
           .unix(each.dt)
           .format("ddd, Do MMM")}</h5>
         <div class="mt-4 text-center">
           <div class="row g-0">
-            <div class="col-12 p-2 border fw-bold">
+            <div tabindex=0 class="col-12 p-2 fw-bold">
               Temperature
             </div>
-            <div class="col-12 p-2">${each.temp.day}&deg; C</div>
+            <div tabindex=0 class="col-12 p-2">${each.temp.day}&deg; C</div>
           </div>
           <div class="row g-0">
-            <div class="col-12 p-2 fw-bold">
+            <div tabindex=0 class="col-12 p-2 fw-bold">
               Humidity
             </div>
-            <div class="col-12 p-2">${each.humidity}&percnt;</div>
+            <div tabindex=0 class="col-12 p-2">${each.humidity}&percnt;</div>
           </div>
           <div class="row g-0">
-            <div class="col-12 p-2 fw-bold">
+            <div tabindex=0 class="col-12 p-2 fw-bold">
               Wind Speed
             </div>
-            <div class="col-12 p-2">${each.wind_speed} MPH</div>
+            <div tabindex=0 class="col-12 p-2">${each.wind_speed} MPH</div>
           </div>
           <div class="row g-0">
-            <div class="col-12 p-2 fw-bold">
+            <div tabindex=0 class="col-12 p-2 fw-bold">
               UV Index
             </div>
-            <div class=" col-12 p-2">
+            <div tabindex=0 class=" col-12 p-2">
               <span class="uv-text px-3 rounded-2 ${getUviClassName(each.uvi)}"
                 >${each.uvi}</span
               >
@@ -180,7 +180,7 @@ const renderForecastData = (data) => {
 
   const forecastWeatherCards = `<div>
     <h2 class="mt-5 fs-4 text-center">5-day Forecast</h2>
-    <hr />
+    
     <div class="d-flex flex-row justify-content-center flex-wrap">
       ${forecastCards}
     </div>
@@ -196,8 +196,8 @@ const renderRecentSearches = () => {
   // ["foo", "bar"]
   if (recentSearches.length) {
     const createRecentCity = (city) => {
-      return `<li
-        class="list-group-item border-top-0 border-end-0 border-start-0"
+      return `<li tabindex=0
+        class="btn btn-light mt-2 mb-2 text-center"
         data-city="${city}"
       >
         ${city}
@@ -207,7 +207,7 @@ const renderRecentSearches = () => {
     const recentCities = recentSearches.map(createRecentCity).join("");
 
     // if render recent searches list
-    const ul = `<ul class="list-group rounded-0">
+    const ul = `<ul class="list-group text-center">
       ${recentCities}
     </ul>`;
 
@@ -215,8 +215,8 @@ const renderRecentSearches = () => {
     recentSearchesContainer.append(ul);
   } else {
     // else empty show alert
-    const alert = `<div class="alert alert-warning" role="alert">
-      You have no recent searches.
+    const alert = `<div tabindex=0 class="alert text-center alert-warning" role="alert" >
+      You have no previous searches 
     </div>`;
 
     // append to parent
@@ -228,7 +228,7 @@ const renderErrorAlert = () => {
   // empty container
   weatherInfoContainer.empty();
 
-  const alert = `<div class="alert alert-danger" role="alert">
+  const alert = `<div tabindex=0 class="text-warning fw-bold m-3" role="alert">
     Something went wrong!! Please try again.
   </div>`;
 
