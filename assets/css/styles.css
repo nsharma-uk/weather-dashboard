@@ -80,7 +80,7 @@ h2 {
 .current-weather-info {
   background-color: #54416d;
   color: #8fe0ff;
-  width: 80%;
+  width: 83%;
   margin: auto;
   margin-top: 60px;
   text-align: left;
@@ -90,7 +90,7 @@ h2 {
 /*forecast weather styling */
 .forecast-card {
   color: #8fe0ff;
-  width: 25%;
+  width: 30%;
   margin: auto;
 }
 
